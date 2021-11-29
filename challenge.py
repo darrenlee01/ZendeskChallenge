@@ -2,14 +2,8 @@ import requests
 import base64
 
 
-# The amount of data you display in the ticket list view and the single ticket view is up to you
-# How you format and display the ticket data is up to you, just ensure it is easy to read
-# The Ticket Viewer should handle the API being unavailable
-# We need to see you write some unit tests for your application in a standard unit testing framework for your language of choice
-
 # defend your design choice in your REAMDE and comments
 
-# The challenge document says that meaningful comments will be looked upon favorably
 
 
 # takes in the url to send a get request to
@@ -19,7 +13,6 @@ import base64
 # returns a json dictionary containing all of the relevant ticket information
 #    pertaining to the user from the access_token
 def getTicketsPage(url, access_token):
-    print(url)
 
     getTickets = requests.get(url,
                             headers={'Content-Type':'application/json',
@@ -30,9 +23,7 @@ def getTicketsPage(url, access_token):
         print("Reason:", getTickets.reason)
         return None
 
-    getTickets = getTickets.json()
-
-    return getTickets
+    return getTickets.json()
 
 # prints the page given the number of tickets to put on the page
 # takes in allTicketsList which is the list of tickest to print from
@@ -170,7 +161,7 @@ def displayAll(allTickets, ticketNum, authorize):
 # attempts to display a single ticket where it prompts user to input ticket id
 # takes in an access_token which is assumed to be a valid base64 encoded
 #   authorization string
-def displayOne(access_token):
+def displayOne(access_token, inputID = None):
     indent = "\t"
 
     validID = False
@@ -185,7 +176,10 @@ def displayOne(access_token):
             "Input the id of the ticket you would like to see in detail\n")
         print("Input: ", end="")
 
-        id = input()
+        if (inputID == None):
+            id = input()
+        else:
+            id = inputID
         if (not id.isdigit()):
             print(indent, "id must be a digit:", repr(id))
         else:
@@ -217,6 +211,8 @@ def displayOne(access_token):
             break
         else:
             print("Try again\n\n")
+            if (inputID != None):
+                return
 
     if (not validID):
         print("Failed too many times. Try again later.")
@@ -252,7 +248,7 @@ def displayOne(access_token):
 #       where authenticate is the base64 encoded authentication string
 #       where requestTickets is the json dictionary containing all of the 
 #           relevant ticket information pertaining to the user
-def authenticate(url):
+def authenticate(url, inputUsername = None):
 
 
     print("First, input email address to view the tickets\n")
@@ -262,7 +258,10 @@ def authenticate(url):
     for eachTry in range(3):  #gives user 3 tries
 
         print("Username: ", end="")
-        username = input()
+        if (inputUsername != None):
+            username = inputUsername
+        else:
+            username = input()
 
 
         # authorize user through base64 encoding
@@ -284,6 +283,8 @@ def authenticate(url):
             return (access_token, requestTickets.json())
         elif (requestTickets.reason == "Unauthorized"):  # if unauthorized
             print("\nCould not authenticate. Try again.\n")
+            if (inputUsername != None):
+                return
         else:  # other issue with get request
             print("Oh no! Issue with getting tickets")
             print("Reason:", requestTickets.reason)
