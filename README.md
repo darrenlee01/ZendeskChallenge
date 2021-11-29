@@ -31,6 +31,11 @@ This viewing option shows 25 tickets at a time, starting from the very first 25 
 Each ticket shown has less details than using the single ticket viewing option. In this case, it only shows the status and subject of the ticket. To see the ticket in more detail, please use the single ticket viewing option.
 
 
+## Testing
+
+To test this program, download the `test_viewer.py` file and run the program. Because the original program depends on outputting to the terminal, it was harder to properly use unit testing to test all the functions. Therefore, the testing program asks the user to check the print statements and ensure it matches the printed solution. 
+
+
 
 
 ## Implementation Details
